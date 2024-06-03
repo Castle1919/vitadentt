@@ -29,10 +29,10 @@
     "web-vitals": "^4.0.1"
   },
   "scripts": {
-    "postinstall": "cd client && npm install",
-    "build": "cd client && npm run build",
-    "start": "cd client && npm start",
-    "test": "cd client && npm test"
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": [
