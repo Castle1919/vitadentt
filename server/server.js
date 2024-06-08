@@ -31,7 +31,7 @@ app.post('/send-email', express.json(), (req, res) => {
     if (error) {
       res.status(500).json({ error: 'Error: Email not sent.' });
     } else {
-      res.status(200).json({ success: 'Email sent successfullydjfhbvjhdbfvjhdbjfvhbf.' });
+      res.status(200).json({ success: 'Email sent successfully.' });
     }
     
   });
