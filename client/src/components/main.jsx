@@ -26,7 +26,7 @@ export function Main() {
     try {
       // console.log(reset);
       const response = await axios.post(
-        "http://localhost:5000/send-email",
+        "https://vitadentt-server-v2.vercel.app/send-email",
         data
       );
       setStatus("Success! Email sent.");
