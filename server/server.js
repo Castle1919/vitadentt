@@ -3,7 +3,9 @@ const nodemailer = require('nodemailer');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const app = express();
-app.use(cors());
+app.use(cors({
+  origin: false,
+}));
 app.use(bodyParser.json());
 
 const transporter = nodemailer.createTransport({
