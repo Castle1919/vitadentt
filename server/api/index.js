@@ -4,7 +4,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const app = express();
 app.use(cors({
-  origin: false,
+  origin: ['https://vitadentt.vercel.app/', 'http://localhost:3000'],
 }));
 app.use(bodyParser.json());
 
