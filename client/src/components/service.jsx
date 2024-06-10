@@ -74,7 +74,7 @@ export function Service () {
     const handleFormSubmit = async (data) => {
       try {
         // console.log(reset);
-        const response = await axios.post('http://localhost:5000/send-email', data);
+        const response = await axios.post("https://vitadentt-server-v2.vercel.app/send-email", data);
         setStatus('Success! Email sent.');
         setPopupMessage('Письмо успешно отправлено!');
         setIsSuccess(true);
