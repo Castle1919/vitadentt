@@ -3,9 +3,7 @@ const nodemailer = require('nodemailer');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const app = express();
-app.use(cors({
-  origin: ['https://vitadentt.vercel.app/', 'http://localhost:3000'],
-}));
+app.use(cors());
 app.use(bodyParser.json());
 
 const transporter = nodemailer.createTransport({
