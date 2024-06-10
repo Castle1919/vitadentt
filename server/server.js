@@ -19,6 +19,10 @@ const transporter = nodemailer.createTransport({
   },
 });
 
+app.get('/', (req, res) => {
+  res.send("hello hotel")
+})
+
 app.post('/send-email', express.json(), (req, res) => {
   const { name, email, message } = req.body;
 
