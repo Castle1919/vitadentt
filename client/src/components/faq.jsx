@@ -14,12 +14,17 @@ const FAQ = () => {
   const [status, setStatus] = useState(null);
   const [popupMessage, setPopupMessage] = useState(null);
   const [isSuccess, setIsSuccess] = useState(false);
-  const { register, handleSubmit, errors, reset } = useForm({
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { handleSubmit, errors, reset } = useForm({
     resolver: yupResolver(schema),
   });
-  const handleFormSubmit = async (data) => {
+  
+  
+  const handleFormSubmit = async (data, reset) => {
+    if (isSubmitting) return; // Проверка, отправляется ли форма
+    setIsSubmitting(true); // Установка состояния отправки
+
     try {
-      // console.log(reset);
       const response = await axios.post(
         "https://vitadentt-server-v2.vercel.app/send-email",
         data
@@ -27,11 +32,13 @@ const FAQ = () => {
       setStatus("Success! Email sent.");
       setPopupMessage("Письмо успешно отправлено!");
       setIsSuccess(true);
-      reset();
+      reset(); // Сброс формы
     } catch (error) {
       setStatus("Error: Email not sent.");
       setPopupMessage("Произошла ошибка при отправке письма.");
       setIsSuccess(false);
+    } finally {
+      setIsSubmitting(false); // Сброс состояния отправки после завершения
     }
   };
 
@@ -162,8 +169,13 @@ const FAQ = () => {
 
   const handleClick = (index) => {
     const faq = filteredFaqs[index];
-    if (faq.answer.includes(t('Контакты')) || faq.answer.includes(t('байланыс'))) {
-      setActiveIndex(index === activeIndex && activeIndex !== null ? null : index);
+    if (
+      faq.answer.includes(t("Контакты")) ||
+      faq.answer.includes(t("байланыс"))
+    ) {
+      setActiveIndex(
+        index === activeIndex && activeIndex !== null ? null : index
+      );
     } else {
       setActiveIndex(index === activeIndex ? null : index);
     }
@@ -235,42 +247,44 @@ const FAQ = () => {
                     className="flex items-center justify-between w-full text-left text-gray-900"
                     onClick={() => handleClick(index)}
                   >
-                    <span className="text-1xl md:text-2xl lg:text-2xl font-bold">
+                    <span className="text-1xl md:text-2xl lg:text-3xl font-bold">
                       {faq.question}
                     </span>
-                    <svg
-                      className={`w-6 h-6 transform transition-transform stroke-[#167495] ${
-                        activeIndex === index ? "rotate-180" : ""
-                      }`}
-                      fill="none"
-                      stroke="#167495"
-                      viewBox="0 0 24 24"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="4"
-                        d="M19 9l-7 7-7-7"
-                      />
-                    </svg>
+                    <div>
+                      <svg
+                        className={`w-6 h-6 transform transition-transform stroke-[#167495] ${
+                          activeIndex === index ? "rotate-180" : ""
+                        }`}
+                        fill="none"
+                        stroke="#167495"
+                        viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="4"
+                          d="M19 9l-7 7-7-7"
+                        />
+                      </svg>
+                    </div>
                   </button>
                   {activeIndex === index && (
-                        <p className="text-xs md:text-base lg:text-1xl mt-2 text-gray-700">
-                        {faq.answer.split(" ").map((word, index) =>
-                          word === t('Контакты') || word === t('байланыс') ? (
-                            <Link
-                              key={index}
-                              to="/contact"
-                              className="text-blueFirst font-medium hover:underline"
-                            >
-                              {word}
-                            </Link>
-                          ) : (
-                            <span key={index}>{word} </span>
-                          )
-                        )}
-                      </p>
+                    <p className="text-s md:text-base lg:text-1xl mt-2 text-gray-700">
+                      {faq.answer.split(" ").map((word, index) =>
+                        word === t("Контакты") || word === t("байланыс") ? (
+                          <Link
+                            key={index}
+                            to="/contact"
+                            className="text-blueFirst font-medium hover:underline"
+                          >
+                            {word}
+                          </Link>
+                        ) : (
+                          <span key={index}>{word} </span>
+                        )
+                      )}
+                    </p>
                   )}
                 </li>
               ))}

@@ -19,12 +19,17 @@ export const AboutUs = () => {
   const [status, setStatus] = useState(null);
   const [popupMessage, setPopupMessage] = useState(null);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { handleSubmit, errors, reset } = useForm({
     resolver: yupResolver(schema),
   });
-  const handleFormSubmit = async (data) => {
+  
+  
+  const handleFormSubmit = async (data, reset) => {
+    if (isSubmitting) return; // Проверка, отправляется ли форма
+    setIsSubmitting(true); // Установка состояния отправки
+
     try {
-      // console.log(reset);
       const response = await axios.post(
         "https://vitadentt-server-v2.vercel.app/send-email",
         data
@@ -32,11 +37,13 @@ export const AboutUs = () => {
       setStatus("Success! Email sent.");
       setPopupMessage("Письмо успешно отправлено!");
       setIsSuccess(true);
-      reset();
+      reset(); // Сброс формы
     } catch (error) {
       setStatus("Error: Email not sent.");
       setPopupMessage("Произошла ошибка при отправке письма.");
       setIsSuccess(false);
+    } finally {
+      setIsSubmitting(false); // Сброс состояния отправки после завершения
     }
   };
 
@@ -82,7 +89,16 @@ export const AboutUs = () => {
     <div>
       <div className="section">
         <div className="container title">
-          <h2>{t('aboutUs.title.heading')}</h2>
+          <h2>
+          {t("aboutUs.title.heading")
+              .split("\n")
+              .map((line, index) => (
+                <React.Fragment key={index}>
+                  {line}
+                  <br />
+                </React.Fragment>
+              ))}{" "}
+          </h2>
           <p>
           {t('aboutUs.title.description')}
           </p>

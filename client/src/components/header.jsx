@@ -1,32 +1,34 @@
 import logo from "./../images/logo.png";
-import { slide as Menu } from 'react-burger-menu'
-import React, { useState } from "react";
-import { NavLink, } from 'react-router-dom'
+import { slide as Menu } from 'react-burger-menu';
+import React, { useState, useEffect } from "react";
+import { NavLink, useHistory } from 'react-router-dom';
 import { useTranslation } from "react-i18next";
 
-
-
 const lngs = {
-  kz: {NativeName: 'Қаз'},
-  ru: {NativeName: 'Рус'}
+  kz: { NativeName: 'Қаз' },
+  ru: { NativeName: 'Рус' }
 };
-
-        {/* <div>
-          <select onChange={(e) => i18n.changeLanguage(e.target.value)}>
-            {Object.keys(lngs).map((lng) => (
-              <option key={lng} value={lng}>
-                {lngs[lng].NativeName}
-              </option>
-            ))}
-          </select>
-        </div> */}
 
 export function Header() {
   const { t, i18n } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
-  let isMenuOpen = function(state) {
-    return state.isOpen;
-  };
+  const history = useHistory();
+
+  // Закрытие меню при переходе на другую страницу
+  useEffect(() => {
+    const handleCloseMenu = () => {
+      setIsOpen(false);
+    };
+
+    // Слушаем изменения в history (навигации)
+    const unlisten = history.listen(handleCloseMenu);
+
+    // Очистка эффекта при размонтировании компонента
+    return () => {
+      unlisten();
+    };
+  }, [history]);
+
   return (
     <header className="header">
       <div className="containerHeader">
@@ -36,12 +38,11 @@ export function Header() {
           </NavLink>
         </div>
 
-        <nav id="menu " className="menu">
+        <nav id="menu" className="menu">
           <ul>
-            
             <li>
               <NavLink to="/contact" activeClassName="active">
-              {t('header.menu.contact')}
+                {t('header.menu.contact')}
               </NavLink>
             </li>
             <li>
@@ -55,7 +56,9 @@ export function Header() {
               </NavLink>
             </li>
             <li>
-              <NavLink to="/faq" activeClassName="active"> FAQ </NavLink>
+              <NavLink to="/faq" activeClassName="active">
+                FAQ
+              </NavLink>
             </li>
 
             <div className="language-switcher">
@@ -74,41 +77,41 @@ export function Header() {
           </ul>
 
           <Menu
-  isOpen={isOpen}
-  onStateChange={(state) => setIsOpen(state.isOpen)}
-  right
-  width={"350px"}
->
-  <NavLink to="/contact" id="contact" className="menu-item">
-    Контакты
-  </NavLink>
-  <NavLink to="/aboutUs" id="team" className="menu-item">
-    О нас
-  </NavLink>
-  <NavLink to="/service" id="services" className="menu-item">
-    Услуги
-  </NavLink>
-  <NavLink to="/faq" id="faq" className="menu-item">
-    FAQ
-  </NavLink>
-  <div className="language-switcher">
-    {Object.keys(lngs).map((lng) => (
-      <button
-        className="buttonLanguage"
-        type="button"
-        key={lng}
-        onClick={() => i18n.changeLanguage(lng)}
-        disabled={i18n.resolvedLanguage === lng}
-      >
-        {lngs[lng].NativeName}
-      </button>
-    ))}
-  </div>
-</Menu>
-<div
-  className={`bm-overlay ${isOpen ? "bm-overlay-open" : ""}`}
-  onClick={() => setIsOpen(false)}
-></div>
+            isOpen={isOpen}
+            onStateChange={(state) => setIsOpen(state.isOpen)}
+            right
+            width={"350px"}
+          >
+            <NavLink to="/contact" id="contact" className="menu-item">
+              {t('header.menu.contact')}
+            </NavLink>
+            <NavLink to="/aboutUs" id="team" className="menu-item">
+              {t('header.menu.aboutUs')}
+            </NavLink>
+            <NavLink to="/service" id="services" className="menu-item">
+              {t('header.menu.service')}
+            </NavLink>
+            <NavLink to="/faq" id="faq" className="menu-item">
+              FAQ
+            </NavLink>
+            <div className="language-switcher">
+              {Object.keys(lngs).map((lng) => (
+                <button
+                  className="buttonLanguage"
+                  type="button"
+                  key={lng}
+                  onClick={() => i18n.changeLanguage(lng)}
+                  disabled={i18n.resolvedLanguage === lng}
+                >
+                  {lngs[lng].NativeName}
+                </button>
+              ))}
+            </div>
+          </Menu>
+          <div
+            className={`bm-overlay ${isOpen ? "bm-overlay-open" : ""}`}
+            onClick={() => setIsOpen(false)}
+          ></div>
         </nav>
       </div>
     </header>

@@ -24,8 +24,8 @@ export function Footer() {
         </div>
 
         <div className="row">
-          VitadentT Copyright © 2024 VitadentT - All rights reserved || Designed
-          By: Castle
+          <h3>VitadentT Copyright © 2024 VitadentT - All rights reserved || Designed
+          By: Castle</h3>
         </div>
       </div>
     </div>

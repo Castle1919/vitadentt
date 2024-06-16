@@ -11,7 +11,7 @@ export const schema = yup.object().shape({
   message: yup.string().min(10, 'Сообщение слишком короткое').required('Сообщение обязателен'),
 });
 
-export const ContactUsToday = forwardRef(({ onSubmit }, ref) => {
+export const ContactUsToday = forwardRef(({ onSubmit, isSubmitting }, ref) => {
   const { t } = useTranslation();
   const {register,handleSubmit,reset,formState: { errors },} = useForm({
     resolver: yupResolver(schema),
@@ -19,8 +19,7 @@ export const ContactUsToday = forwardRef(({ onSubmit }, ref) => {
 
   const handleSubmitAndReset = async (data) => {
     try {
-      await onSubmit(data);
-      reset();
+      await onSubmit(data, reset);
     } catch (err) {
       console.error(err); // Логирование ошибок
     }
@@ -72,7 +71,9 @@ export const ContactUsToday = forwardRef(({ onSubmit }, ref) => {
               {errors.message && <p className="error">{errors.message.message}</p>}
             </div>
 
-            <button className="formBtn" type="submit">{t('form.btn')}</button>
+            <button className="formBtn" type="submit" disabled={isSubmitting}>
+              {isSubmitting ? t('form.submitting') : t('form.btn')}
+            </button>
           </form>
         </div>
       </div>

@@ -18,13 +18,17 @@ export function Main() {
   const [status, setStatus] = useState(null);
   const [popupMessage, setPopupMessage] = useState(null);
   const [isSuccess, setIsSuccess] = useState(false);
-  const { register, handleSubmit, errors, reset } = useForm({
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { handleSubmit, errors, reset } = useForm({
     resolver: yupResolver(schema),
   });
+  
+  
+  const handleFormSubmit = async (data, reset) => {
+    if (isSubmitting) return; // Проверка, отправляется ли форма
+    setIsSubmitting(true); // Установка состояния отправки
 
-  const handleFormSubmit = async (data) => {
     try {
-      // console.log(reset);
       const response = await axios.post(
         "https://vitadentt-server-v2.vercel.app/send-email",
         data
@@ -32,11 +36,13 @@ export function Main() {
       setStatus("Success! Email sent.");
       setPopupMessage("Письмо успешно отправлено!");
       setIsSuccess(true);
-      reset();
+      reset(); // Сброс формы
     } catch (error) {
       setStatus("Error: Email not sent.");
       setPopupMessage("Произошла ошибка при отправке письма.");
       setIsSuccess(false);
+    } finally {
+      setIsSubmitting(false); // Сброс состояния отправки после завершения
     }
   };
   const targetRef = useRef(null);
@@ -88,7 +94,16 @@ export function Main() {
       <section className="section">
         <div className="containerReverse">
           <div className="discription">
-            <h2>{t("main.container3.heading")}</h2>
+            <h2>
+            {t("main.container3.heading")
+              .split("\n")
+              .map((line, index) => (
+                <React.Fragment key={index}>
+                  {line}
+                  <br />
+                </React.Fragment>
+              ))}{" "}
+            </h2>
             <p>
             {t("main.container3.description")}
             </p>
@@ -105,7 +120,16 @@ export function Main() {
       <section className="section">
         <div className="container wrapper">
           <div className="discription">
-          <h2>{t("main.container4.heading")}</h2>
+          <h2>
+          {t("main.container4.heading")
+              .split("\n")
+              .map((line, index) => (
+                <React.Fragment key={index}>
+                  {line}
+                  <br />
+                </React.Fragment>
+              ))}{" "}
+          </h2>
             <p>
             {t("main.container4.description")}
 

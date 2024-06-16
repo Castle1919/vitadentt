@@ -353,6 +353,7 @@ a {
 .pay { 
     display: flex;
     justify-content: space-between;
+    
 }
 .pay  img {
     width: 250px;
@@ -640,16 +641,21 @@ a {
 }
 
 .sliderImages {
+    border-radius: 0;
     width: 100%;
     height: auto;
+    display: inline-block;
+    box-sizing: border-box;
 }
 
 .sliderImages img {
+    margin: 0;
     width: 100%;
     height: auto;
     object-fit: cover;
     display: block;
-    border-radius: 10px;
+    border-radius: 0px;
+    object-fit: cover;
     /* transform: scale(); */
 }
 
@@ -917,7 +923,7 @@ a {
 
     .discription p,
     a {
-        font-size: 16px;
+        font-size: 20px;
     }
 
     .image {
@@ -940,6 +946,9 @@ a {
 
     .recall h2:nth-child(1) {
         font-size: 26px;
+    }
+    .recall p {
+        font-size: 22px;
     }
 
     .footer .row ul li {
@@ -1004,9 +1013,7 @@ a {
 @media screen and (max-width: 540px) {
     .burgerBtn {
         display: flex;
-
     }
-
     .menu>ul {
         display: none;
     }
@@ -1018,8 +1025,7 @@ a {
         width: 40%;
         position: fixed;
         right: 0px;
-        top: 0px;
-        
+        top: 0px 
     }
 
     .burgerBtn .line {
@@ -1061,16 +1067,18 @@ a {
     }
 
     .discription h2 {
-        font-size: 36px;
+        font-size: 42px;
     }
 
-    .discription p,
-    a {
+    .discription p {
         font-size: 16px;
     }
     .pay  img {
-        width: 200px;
+        width: 180px;
         height: auto;
+    }
+    .pay {
+        margin: auto;
     }
 
     .image {
@@ -1095,12 +1103,17 @@ a {
 
     .footer .row ul li {
         display: block;
-        margin: 10px 0px;
+        /* margin: 5px 0px; */
         text-align: left;
+        font-size: 28px;
     }
 
     .footer .row a i {
         margin: 0% 3%;
+    }
+    .row h3 {
+        font-size: 12px;
+        margin: auto;
     }
 
     .logo img {
@@ -1114,8 +1127,13 @@ a {
 
     .mapDiscription {
         display: flex;
+        margin: auto;
 
     }
+
+    /* .container title {
+        font-size: ;
+    } */
 
     .containerSlider {
         display: flex;
@@ -1129,6 +1147,9 @@ a {
         display: flex;
         flex-direction: column;
         width: 100%;
+    }
+    .sliderTextName {
+        font-size: 40px;
     }
 
     .containerWrapper {
@@ -1157,7 +1178,7 @@ a {
     }
 
     .title h2 {
-        font-size: 36px;
+        font-size: 42px;
     }
 
     .recall {
@@ -1169,38 +1190,60 @@ a {
     }
 
     .recall p {
-        font-size: 26px;
+        font-size: 18px;
     }
 
     .recall h2 {
-        font-size: 30px;
-    }
-    .table th {
-        background-color: #167495;
-        border: 1px solid #5dc3e7;
-        color: white;
-        font-size: 13px;
-        /* padding: 10px;
-        width: 100%; */
-    
+        font-size: 22px;
     }
     .table{
-        width: 80%;
+        width: 100%;
+        table-layout: fixed;
+        border-collapse: collapse;
     }
     .containerTable{
         width: 100%;
-    } 
+    }
+
+    .table th, .table td {
+        text-align: center;
+        padding: 0px; /* Отступы для ячеек */
+    }
+
     .table th {
-        font-size: 23px;
+        font-size: 16px;
         padding: 10px;
+        
     }
-    .price {
-        font-size: 11px;
-        padding: 10px;
-    }
+    
     .table td {
-        font-size: 11px;
-        padding: 10px;
+        font-size: 12px;
+        padding: 7px;
+        padding-bottom: 5px;
+
+    }
+        .table th:nth-child(1),
+        .table td:nth-child(1) {
+            width: 35%;
+            /* text-align: left; */
+        }
+    
+        .table th:nth-child(2),
+        .table td:nth-child(2) {
+            width: 40%;
+        }
+    
+        .table th:nth-child(3),
+        .table td:nth-child(3) {
+            width: 25%;
+        }
+    .price {
+        font-size: 12px;
+
+        padding-bottom: 5px;
+    }
+    #contanctTitle{
+        font-size: 52px;
     }
 }
 
@@ -1240,7 +1283,7 @@ a {
         top: 20px;
     }
     .pay  img {
-        width: 150px;
+        width: 120px;
         height: auto;
     }
 
@@ -1317,7 +1360,12 @@ a {
 
     .mapDiscription {
         display: flex;
+        margin: auto;
+        width: 100%;
 
+    }
+    .textContactUs h2 {
+        font-size: 35px;
     }
 
     .containerSlider {
@@ -1348,12 +1396,7 @@ a {
         margin-left: 0;
     }
 
-    .table th,
-    .table td {
-        padding: 10px;
-        text-align: center;
-        font-size: 18px;
-    }
+    
 
     .title {
         font-size: 35px;
@@ -1392,25 +1435,54 @@ a {
         font-size: 36px;
     }
 
-    .containerTable{
-        width: 100%;
-    } 
     .table{
         width: 100%;
+        table-layout: fixed;
+        border-collapse: collapse;
     }
+    .containerTable{
+        width: 100%;
+    }
+
+    .table th, .table td {
+        text-align: center;
+        padding: 0px; /* Отступы для ячеек */
+    }
+
     .table th {
-        font-size: 14px;
+        font-size: 16px;
         padding: 10px;
+        
     }
+    
     .table td {
-        font-size: 10px;
-        padding: 0px;
+        font-size: 12px;
+        padding: 7px;
         padding-bottom: 5px;
+
     }
+        .table th:nth-child(1),
+        .table td:nth-child(1) {
+            width: 35%;
+            /* text-align: left; */
+        }
+    
+        .table th:nth-child(2),
+        .table td:nth-child(2) {
+            width: 40%;
+        }
+    
+        .table th:nth-child(3),
+        .table td:nth-child(3) {
+            width: 25%;
+        }
     .price {
         font-size: 10px;
-        padding: 0px;
+
         padding-bottom: 5px;
+    }
+    #contanctTitle{
+        font-size: 52px;
     }
     
 }
