@@ -1,12 +1,12 @@
 import logo from "./../images/logo.webp";
-import { slide as Menu } from 'react-burger-menu';
+import { slide as Menu } from "react-burger-menu";
 import React, { useState, useEffect } from "react";
-import { NavLink, useHistory } from 'react-router-dom';
+import { NavLink, useHistory } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
 const lngs = {
-  kz: { NativeName: 'Қаз' },
-  ru: { NativeName: 'Рус' }
+  kz: { NativeName: "Қаз" },
+  ru: { NativeName: "Рус" },
 };
 
 export function Header() {
@@ -28,6 +28,14 @@ export function Header() {
       unlisten();
     };
   }, [history]);
+  useEffect(() => {
+    const preloadImage = (url) => {
+      const img = new Image();
+      img.src = url;
+    };
+
+    preloadImage(logo);
+  }, []);
 
   return (
     <header className="header">
@@ -42,17 +50,17 @@ export function Header() {
           <ul>
             <li>
               <NavLink to="/contact" activeClassName="active">
-                {t('header.menu.contact')}
+                {t("header.menu.contact")}
               </NavLink>
             </li>
             <li>
               <NavLink to="/aboutUs" activeClassName="active">
-                {t('header.menu.aboutUs')}
+                {t("header.menu.aboutUs")}
               </NavLink>
             </li>
             <li>
               <NavLink to="/service" activeClassName="active">
-                {t('header.menu.service')}
+                {t("header.menu.service")}
               </NavLink>
             </li>
             <li>
@@ -83,13 +91,13 @@ export function Header() {
             width={"350px"}
           >
             <NavLink to="/contact" id="contact" className="menu-item">
-              {t('header.menu.contact')}
+              {t("header.menu.contact")}
             </NavLink>
             <NavLink to="/aboutUs" id="team" className="menu-item">
-              {t('header.menu.aboutUs')}
+              {t("header.menu.aboutUs")}
             </NavLink>
             <NavLink to="/service" id="services" className="menu-item">
-              {t('header.menu.service')}
+              {t("header.menu.service")}
             </NavLink>
             <NavLink to="/faq" id="faq" className="menu-item">
               FAQ
