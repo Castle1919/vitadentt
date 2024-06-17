@@ -1,4 +1,4 @@
-import logo from "./../images/logo.png";
+import logo from "./../images/logo.webp";
 import { slide as Menu } from 'react-burger-menu';
 import React, { useState, useEffect } from "react";
 import { NavLink, useHistory } from 'react-router-dom';
