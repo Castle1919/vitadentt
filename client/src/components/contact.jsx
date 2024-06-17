@@ -7,8 +7,8 @@ import PopUp from "./popUp";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useTranslation } from "react-i18next";
-import KaspiPay from '../images/kaspiPay.png';
-import BccPay from '../images/logobcc.png';
+import KaspiPay from '../images/kaspiPay.webp';
+import BccPay from '../images/logobcc.webp';
 
 
 export function Contact() {

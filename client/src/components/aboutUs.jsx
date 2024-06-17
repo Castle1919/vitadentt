@@ -6,10 +6,10 @@ import { schema }from "./contactUsToday";
 import { useTranslation } from "react-i18next";
 import ContactUsToday from "./contactUsToday";
 import axios from 'axios';
-import arrow1 from './../images/arrows/arrow1.png'
-import stomatSurgeon from './../images/photo_2024-05-30_00-00-17.jpg'
-import stomatTherapist from './../images/photo_2024-05-30_00-00-18.jpg'
-import nurse from './../images/photo_2024-05-30_00-00-16.jpg'
+import arrow1 from './../images/arrow1.webp'
+import stomatSurgeon from './../images/photo_2024-05-30_00-00-17.webp'
+import stomatTherapist from './../images/photo_2024-05-30_00-00-18.webp'
+import nurse from './../images/photo_2024-05-30_00-00-16.webp'
 
 
 export const AboutUs = () => {

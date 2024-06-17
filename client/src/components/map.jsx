@@ -1,5 +1,6 @@
 import React from 'react';
 import { GoogleMap, useJsApiLoader, InfoWindow, Marker } from '@react-google-maps/api';
+import { useTranslation } from "react-i18next";
 
 let containerStyle = {
   width: '700px',
@@ -16,6 +17,7 @@ const center = {
 };
 
 function MyComponent() {
+  const { t } = useTranslation();
   const [selectedPlace, setSelectedPlace] = React.useState(null);
   const { isLoaded } = useJsApiLoader({
     id: 'google-map-script',
@@ -59,7 +61,7 @@ function MyComponent() {
           )}
           <Marker
             position={{ lat: 49.89586349462562, lng: 73.21122122881611 }}
-            onClick={() => markerClick({ lat: 49.89586349462562, lng: 73.21122122881611, name: '"VitadentT"', description: 'Стомотология' })}
+            onClick={() => markerClick({ lat: 49.89586349462562, lng: 73.21122122881611, name: t('contact.adress'), description: '"VitadentT"' })}
           />
         </GoogleMap>
       ) : <></>}

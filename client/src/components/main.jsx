@@ -1,10 +1,10 @@
 import React, { useState, useRef } from "react";
 import { NavLink, } from 'react-router-dom'
-import smile from "./../images/smile.jpg";
-import SecondImage from "./../images/secondImg.jpeg";
-import ThirdImg from "./../images/ThirdImg.jpg";
-import fouthImg from "./../images/fouthImg.jpeg";
-import fifthImg from "./../images/fifthImg.jpeg";
+import smile from "./../images/smile.webp";
+import SecondImage from "./../images/secondImg.webp";
+import ThirdImg from "./../images/ThirdImg.webp";
+import fouthImg from "./../images/fouthImg.webp";
+import fifthImg from "./../images/fifthImg.webp";
 import { useTranslation } from "react-i18next";
 import axios from "axios";
 import ContactUsToday from "./contactUsToday";
