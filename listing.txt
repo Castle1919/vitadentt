@@ -1,0 +1,928 @@
+//main.jsx
+import React, { useState, useRef } from "react";
+import { NavLink, } from 'react-router-dom'
+import smile from "./../images/smile.jpg";
+import SecondImage from "./../images/secondImg.jpeg";
+import ThirdImg from "./../images/ThirdImg.jpg";
+import fouthImg from "./../images/fouthImg.jpeg";
+import fifthImg from "./../images/fifthImg.jpeg";
+import { useTranslation } from "react-i18next";
+import axios from "axios";
+import ContactUsToday from "./contactUsToday";
+import PopUp from "./popUp";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useForm } from "react-hook-form";
+import { schema } from "./contactUsToday";
+export function Main() {
+  const { t, i18n } = useTranslation();
+  const [status, setStatus] = useState(null);
+  const [popupMessage, setPopupMessage] = useState(null);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const { register, handleSubmit, errors, reset } = useForm({resolver: yupResolver(schema),});
+    const handleFormSubmit = async (data) => {
+    try {const response = await axios.post("http://localhost:5000/send-email",data);
+      setStatus("Success! Email sent.");
+      setPopupMessage("Письмо успешно отправлено!");
+      setIsSuccess(true);
+      reset();
+    } catch (error) {
+      setStatus("Error: Email not sent.");
+      setPopupMessage("Произошла ошибка при отправке письма.");
+      setIsSuccess(false);}};
+  const targetRef = useRef(null);
+  const scrollToTarget = () => {
+    if (targetRef.current) {targetRef.current.scrollIntoView({ behavior: "smooth" });}};
+ return (
+    <main>
+      <section className="section">
+        <div className="container wrapper">
+          <div className="discription">
+            <h2>{t("main.container1.heading")}</h2>
+            <p>{t("main.container1.description")}</p>
+            <button className="btn" onClick={scrollToTarget}>{t("main.button.signUp")}</button></div>
+            <div className="image">
+            <img id="imageOne" src={smile} alt="Ulybka" />
+          </div>
+        </div>
+      </section>
+ <section className="section">
+        <div className="container wrapper">
+          <div className="discription">
+            <h2>{t("main.container2.heading")}</h2>
+            <p>{t("main.container2.description")}</p>
+            <NavLink to="/contact">
+              <button className="btn">{t("main.button.go")}</button></NavLink>
+          </div>
+          <div className="image">
+            <img src={SecondImage} alt="stul" /></div>
+        </div>
+      </section>
+      <section className="section">
+        <div className="containerReverse">
+          <div className="discription"><h2>{t("main.container3.heading")}</h2>
+            <p>{t("main.container3.description")}</p>
+            <NavLink to="/service">
+              <button className="btn">{t("main.button.go")}</button></NavLink>
+          </div>
+          <div className="image"><img src={ThirdImg} alt="" /></div>
+        </div>
+      </section>
+      <section className="section">
+        <div className="container wrapper">
+          <div className="discription">
+          <h2>{t("main.container4.heading")}</h2>
+          <p>{t("main.container4.description")}</p>
+            <NavLink to="/faq">
+              <button className="btn">{t("main.button.go")}</button></NavLink>
+          </div>
+          <div className="image"><img src={fouthImg} alt="" /></div>
+        </div>
+      </section>
+      <section className="section">
+        <div className="containerReverse">
+          <div className="discription">
+          <h2>{t("main.container5.heading")}</h2>
+          <p>{t("main.container5.description")}</p>
+            <NavLink to="/aboutUs">
+              <button className="btn">{t("main.button.go")}</button>
+            </NavLink>
+          </div>
+          <div className="image"><img src={fifthImg} alt="" /></div>
+        </div>
+      </section>
+      <section className="section">
+        <div className="container wrapper" id="containerRecall">
+          <div className="recall">
+            <p>{t("main.recall.text")}</p>
+            <h2>{t("main.recall.name")}</h2>
+          </div>
+        </div>
+      </section>
+      <ContactUsToday onSubmit={handleFormSubmit} reset={reset} ref={targetRef}/>
+      <PopUp message={popupMessage} isSuccess={isSuccess} />
+    </main>
+  );
+}
+
+//header.jsx
+import logo from "./../images/logo.png";
+import { slide as Menu } from 'react-burger-menu'
+import React, { useState } from "react";
+import { NavLink, } from 'react-router-dom'
+import { useTranslation } from "react-i18next";
+const lngs = {
+  kz: {NativeName: 'Қаз'},
+  ru: {NativeName: 'Рус'}
+};
+export function Header() {
+  const { t, i18n } = useTranslation();
+  const [isOpen, setIsOpen] = useState(false);
+  let isMenuOpen = function(state) {
+    return state.isOpen;
+  };
+  return (
+    <header className="header">
+      <div className="containerHeader">
+        <div className="logo">
+          <NavLink to="/main">
+            <img src={logo} alt="Logo" />
+          </NavLink>
+        </div>
+        <nav id="menu " className="menu">
+          <ul>
+            <li>
+              <NavLink to="/contact">{t('header.menu.contact')}</NavLink>
+            </li>
+            <li>
+              <NavLink to="/aboutUs">{t('header.menu.aboutUs')}</NavLink>
+            </li>
+            <li>
+              <NavLink to="/service">{t('header.menu.service')}</NavLink>
+            </li>
+            <li>
+              <NavLink to="/faq"> FAQ </NavLink>
+            </li>
+            <div className="language-switcher">
+              {Object.keys(lngs).map((lng) => (
+                <button className="buttonLanguage" type="button" key={lng} onClick={() => i18n.changeLanguage(lng)}
+                  disabled={i18n.resolvedLanguage === lng}> {lngs[lng].NativeName} </button>))}
+            </div>
+          </ul>
+          <Menu onStateChange={isMenuOpen} pageWrapId={"root"} outerContainerId={"menu"} isOpen={false}
+            width={"350px"}
+            right>
+            <NavLink to="/contact" id="contact" className="menu-item"> {" "} Контакты{" "} </NavLink>
+            <NavLink to="/aboutUs" id="team" className="menu-item"> {" "} О нас</NavLink>
+            <NavLink to="/service" id="services" className="menu-item"> {" "} Услуги </NavLink>
+            <NavLink to="/faq" id="faq" className="menu-item"> {" "} FAQ </NavLink>
+            <div className="language-switcher">
+              {Object.keys(lngs).map((lng) => (
+                <button className="buttonLanguage" type="button" key={lng}
+                  onClick={() => i18n.changeLanguage(lng)} disabled={i18n.resolvedLanguage === lng}>
+                  {lngs[lng].NativeName}
+                </button> ))}
+            </div>
+          </Menu>
+        </nav>
+      </div>
+    </header>);}
+
+//footer.jsx
+import { NavLink } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+export function Footer() {
+  const { t, i18n } = useTranslation();
+  return (
+    <div>
+      <div className="footer">
+        <div className="row">
+          <ul>
+            <li>
+              <NavLink to="/contact">{t('header.menu.contact')}</NavLink>
+            </li>
+            <li>
+              <NavLink to="/aboutUs">{t('header.menu.aboutUs')}</NavLink>
+            </li>
+            <li>
+              <NavLink to="/service">{t('header.menu.service')}</NavLink>
+            </li>
+          </ul>
+        </div>
+
+        <div className="row">
+          VitadentT Copyright © 2024 VitadentT - All rights reserved || Designed
+          By: Castle
+        </div>
+      </div>
+    </div>);}
+
+//App.js
+import { Switch, Route, Redirect, useRouteMatch, NavLink, useNavigate, useLocation, useHistory } from 'react-router-dom'
+import { useTranslation, Trans } from "react-i18next";
+import { Contact } from "./components/contact";
+import { Footer } from "./components/footer";
+import { Header } from "./components/header"
+import { Main } from "./components/main"
+import Service from "./components/service"
+import AboutUs from "./components/aboutUs"
+import FAQ from './components/faq';
+import ScrollToTop from './ScrollToTop';
+import NotFound from './components/notFound';
+function App() {
+  const { t } = useTranslation()
+  const location = useLocation();
+  const history = useHistory();
+  return (
+    <div>
+      <Header />
+      <ScrollToTop/>
+      <Switch>
+        <Route exact path="/" component={Main} />
+        <Route exact path="/main" component={Main} />
+        <Route exact path="/contact" component={Contact} />
+        <Route exact path="/service" component={Service} />
+        <Route exact path="/aboutUs" component={AboutUs} />
+        <Route exact path="/faq" component={FAQ} />
+        <Route component={NotFound} />
+      </Switch>
+      <Footer />
+    </div>);}
+export default App;
+
+//index.js
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import './styles/index.css';
+import App from './App';
+import './i18n'
+import { BrowserRouter, Route } from 'react-router-dom';
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(
+  <BrowserRouter>
+    <React.StrictMode>
+      <App />
+    </React.StrictMode>
+  </BrowserRouter>);
+//ScrollToTop
+import { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
+const ScrollToTop = () => {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+  return null;};
+
+export default ScrollToTop;
+
+//server.js
+const express = require('express');
+const nodemailer = require('nodemailer');
+const cors = require('cors');
+const bodyParser = require('body-parser');
+const app = express();
+app.use(cors());
+app.use(bodyParser.json());
+const transporter = nodemailer.createTransport({
+  host: 'smtp.gmail.com',
+  port: 587,
+  secure: false,
+  
+  auth: {
+    user: 'nursultan12369@gmail.com',
+    pass: '',
+  },
+});
+app.post('/send-email', express.json(), (req, res) => {
+  const { name, email, message } = req.body;
+  const mailOptions = {from: 'nursultan12369@gmail.com',
+    to: 'nursultan12369@gmail.com',
+    subject: 'New Contact Form Submission',
+    text: `Name: ${name}\nEmail: ${email}\nMessage: ${message}`,};
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) { res.status(500).json({ error: 'Error: Email not sent.' }); } else {
+        res.status(200).json({ success: 'Email sent successfullydjfhbvjhdbfvjhdbjfvhbf.' });}
+    });
+});
+const PORT = process.env.PORT || 5000; 
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});
+
+//aboutUs
+
+import React, { useState } from 'react';
+import PopUp from './popUp'
+import { yupResolver } from '@hookform/resolvers/yup';
+import { useForm } from 'react-hook-form';
+import { schema }from "./contactUsToday";
+import { useTranslation } from "react-i18next";
+import ContactUsToday from "./contactUsToday";
+import axios from 'axios';
+import arrow1 from './../images/arrows/arrow1.png'
+import stomatSurgeon from './../images/photo_2024-05-30_00-00-17.jpg'
+import stomatTherapist from './../images/photo_2024-05-30_00-00-18.jpg'
+import nurse from './../images/photo_2024-05-30_00-00-16.jpg'
+export const AboutUs = () => {
+  const { t, i18n } = useTranslation();
+  const [status, setStatus] = useState(null);
+  const [popupMessage, setPopupMessage] = useState(null);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const { register, handleSubmit, errors, reset } = useForm({resolver: yupResolver(schema),});
+  const handleFormSubmit = async (data) => {
+    try {
+      const response = await axios.post("http://localhost:5000/send-email",data);
+      setStatus("Success! Email sent.");
+      setPopupMessage("Письмо успешно отправлено!");
+      setIsSuccess(true);
+      reset();
+    } catch (error) {
+      setStatus("Error: Email not sent.");
+      setPopupMessage("Произошла ошибка при отправке письма.");
+      setIsSuccess(false);}};
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const slides = [
+    {image: stomatSurgeon,
+      name: t('aboutUs.slider.stomatSurgeon.name'),
+      specialist: t('aboutUs.slider.stomatSurgeon.specialist'),
+      seniority: t('aboutUs.slider.stomatSurgeon.seniority'),
+      description: t('aboutUs.slider.stomatSurgeon.description'),},
+    {image: stomatTherapist,
+      name: t('aboutUs.slider.stomatTherapist.name'),
+      specialist: t('aboutUs.slider.stomatTherapist.specialist'),
+      seniority: t('aboutUs.slider.stomatTherapist.seniority'),
+      description: t('aboutUs.slider.stomatTherapist.description'),},
+    {image: nurse,
+      name: t('aboutUs.slider.nurse.name'),
+      specialist: t('aboutUs.slider.nurse.specialist'),
+      seniority: t('aboutUs.slider.nurse.seniority'),
+      description: t('aboutUs.slider.nurse.description'),},];
+  const handlePrev = () => {
+    setCurrentIndex((currentIndex - 1 + slides.length) % slides.length);};
+  const handleNext = () => {
+    setCurrentIndex((currentIndex + 1) % slides.length);};
+  return (
+    <div>
+      <div className="section">
+        <div className="container title">
+          <h2>{t('aboutUs.title.heading')}</h2>
+          <p>{t('aboutUs.title.description')}</p>
+          <h2 className='m-auto'>{t('aboutUs.title.heading2')}</h2>
+        </div>
+        <div className='containerWrapper'>
+        <div className="containerSlider">
+          <div className="slider" >
+            <div className="sliderImages">
+              <img src={slides[currentIndex].image} alt="Slide image" />
+            </div>
+            <div className="slider-controls">
+              <div className="left-controls">
+                <button className="prev" onClick={handlePrev}><img src={arrow1} alt="Arrow 1" /></button>
+              </div>
+              <div className="right-controls">
+                <button className="next" onClick={handleNext}><img src={arrow1} alt="Arrow 1" /></button>
+              </div>
+            </div>
+          </div>
+        </div>
+          <div className="textWrapper">
+            <div className="sliderTextName">{slides[currentIndex].name}</div>
+            <div className="sliderTextSpecialist">{slides[currentIndex].specialist}</div>
+            <div className="sliderTextDescription">
+              {slides[currentIndex].seniority} <br/>
+              {slides[currentIndex].description}
+            </div>
+          </div>
+        </div>
+      </div>
+      <ContactUsToday onSubmit={handleFormSubmit} reset={reset} />
+      <PopUp message={popupMessage} isSuccess={isSuccess} />
+    </div>
+  );
+};
+export default AboutUs;
+import React, { useState } from "react";
+import { Link } from 'react-router-dom';
+import PopUp from "./popUp";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useForm } from "react-hook-form";
+import { schema } from "./contactUsToday";
+import { useTranslation } from "react-i18next";
+import ContactUsToday from "./contactUsToday";
+import axios from "axios";
+
+const FAQ = () => {
+  const { t } = useTranslation();
+  //Form
+  const [status, setStatus] = useState(null);
+  const [popupMessage, setPopupMessage] = useState(null);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const { register, handleSubmit, errors, reset } = useForm({
+    resolver: yupResolver(schema),
+  });
+  const handleFormSubmit = async (data) => {
+    try {
+      // console.log(reset);
+      const response = await axios.post(
+        "http://localhost:5000/send-email",
+        data
+      );
+      setStatus("Success! Email sent.");
+      setPopupMessage("Письмо успешно отправлено!");
+      setIsSuccess(true);
+      reset();
+    } catch (error) {
+      setStatus("Error: Email not sent.");
+      setPopupMessage("Произошла ошибка при отправке письма.");
+      setIsSuccess(false);
+    }
+  };
+
+  const faqs = [
+    {
+      category: t('faq.buttons.categoryDentalCare'),
+      question: t('faq.faqs.categoryDentalCare.list1.question'),
+      answer: t('faq.faqs.categoryDentalCare.list1.answer'),
+    },
+    {
+      category: t('faq.buttons.categoryDentalCare'),
+      question: t('faq.faqs.categoryDentalCare.list2.question'),
+      answer: t('faq.faqs.categoryDentalCare.list2.answer'),
+    },
+    {
+      category: t('faq.buttons.categoryDentalCare'),
+      question: t('faq.faqs.categoryDentalCare.list3.question'),
+      answer: t('faq.faqs.categoryDentalCare.list3.answer'),
+    },
+    {
+      category: t('faq.buttons.categoryDentalCare'),
+      question: t('faq.faqs.categoryDentalCare.list4.question'),
+      answer: t('faq.faqs.categoryDentalCare.list4.answer'),
+    },
+    {
+      category: t('faq.buttons.categoryDentalCare'),
+      question: t('faq.faqs.categoryDentalCare.list5.question'),
+      answer: t('faq.faqs.categoryDentalCare.list5.answer'),
+    },
+    {
+      category: t('faq.buttons.categoryDentalCare'),
+      question: t('faq.faqs.categoryDentalCare.list6.question'),
+      answer: t('faq.faqs.categoryDentalCare.list6.answer'),
+    },
+    {
+      category: t('faq.buttons.categoryDentalCare'),
+      question: t('faq.faqs.categoryDentalCare.list7.question'),
+      answer: t('faq.faqs.categoryDentalCare.list7.answer'),
+    },
+    {
+      category: t('faq.buttons.categoryDentalCare'),
+      question: t('faq.faqs.categoryDentalCare.list8.question'),
+      answer: t('faq.faqs.categoryDentalCare.list8.answer'),
+    },
+    {
+      category: t('faq.buttons.categoryDentalCare'),
+      question: t('faq.faqs.categoryDentalCare.list9.question'),
+      answer: t('faq.faqs.categoryDentalCare.list9.answer'),
+    },
+
+
+
+
+
+
+
+    {
+      category: t('faq.buttons.categoryDentalDisease'),
+      question: t('faq.faqs.categoryDentalDisease.list1.question'),
+      answer: t('faq.faqs.categoryDentalDisease.list1.answer'),
+    },
+    {
+      category: t('faq.buttons.categoryDentalDisease'),
+      question: t('faq.faqs.categoryDentalDisease.list2.question'),
+      answer: t('faq.faqs.categoryDentalDisease.list2.answer'),
+    },
+    {
+      category: t('faq.buttons.categoryDentalDisease'),
+      question: t('faq.faqs.categoryDentalDisease.list3.question'),
+      answer: t('faq.faqs.categoryDentalDisease.list3.answer'),
+    },
+    {
+      category: t('faq.buttons.categoryDentalDisease'),
+      question: t('faq.faqs.categoryDentalDisease.list4.question'),
+      answer: t('faq.faqs.categoryDentalDisease.list4.answer'),
+    },
+    {
+      category: t('faq.buttons.categoryDentalDisease'),
+      question: t('faq.faqs.categoryDentalDisease.list5.question'),
+      answer: t('faq.faqs.categoryDentalDisease.list5.answer'),
+    },
+    {
+      category: t('faq.buttons.categoryDentalDisease'),
+      question: t('faq.faqs.categoryDentalDisease.list6.question'),
+      answer: t('faq.faqs.categoryDentalDisease.list6.answer'),
+    },
+    {
+      category: t('faq.buttons.categoryDentalDisease'),
+      question: t('faq.faqs.categoryDentalDisease.list7.question'),
+      answer: t('faq.faqs.categoryDentalDisease.list7.answer'),
+    },
+    {
+      category: t('faq.buttons.categoryDentalDisease'),
+      question: t('faq.faqs.categoryDentalDisease.list8.question'),
+      answer: t('faq.faqs.categoryDentalDisease.list8.answer'),
+    },
+
+
+
+
+    {
+      category: t('faq.buttons.categoryPay'),
+      question: t('faq.faqs.categoryPay.list1.question'),
+      answer: t('faq.faqs.categoryPay.list1.answer'),
+    },
+    {
+      category: t('faq.buttons.categoryPay'),
+      question: t('faq.faqs.categoryPay.list2.question'),
+      answer: t('faq.faqs.categoryPay.list2.answer'),
+    },
+    {
+      category: t('faq.buttons.categoryPay'),
+      question: t('faq.faqs.categoryPay.list3.question'),
+      answer: t('faq.faqs.categoryPay.list3.answer'),
+    },
+    {
+      category: t('faq.buttons.categoryPay'),
+      question: t('faq.faqs.categoryPay.list4.question'),
+      answer: t('faq.faqs.categoryPay.list4.answer'),
+    },
+    {
+      category: t('faq.buttons.categoryPay'),
+      question: t('faq.faqs.categoryPay.list5.question'),
+      answer: t('faq.faqs.categoryPay.list5.answer'),
+    },
+    {
+      category: t('faq.buttons.categoryPay'),
+      question: t('faq.faqs.categoryPay.list6.question'),
+      answer: t('faq.faqs.categoryPay.list6.answer'),
+    },
+  ];
+
+  const [activeIndex, setActiveIndex] = useState(null);
+  const [activeCategory, setActiveCategory] = useState(t('faq.buttons.categoryDentalCare'));
+
+  const handleClick = (index) => {
+    setActiveIndex(index === activeIndex ? null : index);
+  };
+
+  const handleCategoryClick = (category) => {
+    setActiveCategory(category);
+    setActiveIndex(null);
+  };
+
+  const filteredFaqs = faqs.filter((faq) => faq.category === activeCategory);
+
+  return (
+    <div>
+      <div className="section">
+        <div className="containerFaq w-5/6 m-auto flex justify-start items-center gap-[3.125rem] flex-col">
+          <div className="w-10/12 flex gap-5 items-start">
+            <h2 className="text-4xl md:text-5xl lg:text-[56px]">
+              {t('faq.heading')}
+            </h2>
+          </div>
+
+          <div className="flex gap-4">
+            <button
+              className={`px-4 py-2 ${
+                activeCategory === t('faq.buttons.categoryDentalCare')
+                  ? "bg-blueThird text-white rounded-lg"
+                  : "bg-white text-blueFirst border-2 border-blueSecond rounded-lg"
+              }`}
+              onClick={() => handleCategoryClick(t('faq.buttons.categoryDentalCare'))}
+            >
+              {t('faq.buttons.categoryDentalCare')}
+            </button>
+            <button
+              className={`px-4 py-2 ${
+                activeCategory === t('faq.buttons.categoryPay')
+                  ? "bg-blueThird text-white rounded-lg"
+                  : "bg-white text-blueFirst border-2 border-blueSecond rounded-lg"
+              }`}
+              onClick={() => handleCategoryClick(t('faq.buttons.categoryPay'))}
+            >
+              {t('faq.buttons.categoryPay')}
+            </button>
+            <button
+              className={`px-4 py-2 ${
+                activeCategory === t('faq.buttons.categoryDentalDisease')
+                  ? "bg-blueThird text-white rounded-lg"
+                  : "bg-white text-blueFirst border-2 border-blueSecond rounded-lg"
+              }`}
+              onClick={() =>
+                handleCategoryClick(t('faq.buttons.categoryDentalDisease'))
+              }
+            >
+              {t('faq.buttons.categoryDentalDisease')}
+            </button>
+          </div>
+
+          <div className="bg-white p-6 rounded-lg border-[#38b5df] border-solid border-2 shadow-md w-full md:w-10/12">
+            <ul className="divide-y divide-blueFirst">
+              {filteredFaqs.map((faq, index) => (
+                <li key={index} className="py-4">
+                  <button
+                    className="flex items-center justify-between w-full text-left text-gray-900"
+                    onClick={() => handleClick(index)}
+                  >
+                    <span className="text-1xl md:text-2xl lg:text-2xl font-bold">
+                      {faq.question}
+                    </span>
+                    <svg
+                      className={`w-6 h-6 transform transition-transform stroke-[#167495] ${
+                        activeIndex === index ? "rotate-180" : ""
+                      }`}
+                      fill="none"
+                      stroke="#167495"
+                      viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="4"
+                        d="M19 9l-7 7-7-7"
+                      />
+                    </svg>
+                  </button>
+                  {activeIndex === index && (
+                    <p className="text-xs md:text-base lg:text-1xl mt-2 text-gray-700">
+                      {faq.answer.split(" ").map((word, index) =>
+                        word === t('Контакты') ? (
+                          <Link
+                            key={index}
+                            to="/contact"
+                            className="text-blueFirst font-medium hover:underline"
+                          >
+                            {word}
+                          </Link>
+                        ) : (
+                          <span key={index}>{word} </span>
+                        )
+                      )}
+                      {/* {faq.answer} */}
+                    </p>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </div>
+      <ContactUsToday onSubmit={handleFormSubmit} reset={reset} />
+      <PopUp message={popupMessage} isSuccess={isSuccess} />
+    </div>
+  );
+};
+
+export default FAQ;
+import React from 'react';
+import ContactUsToday from "./contactUsToday";
+import axios from 'axios';
+import { useState } from 'react';
+import PopUp from './popUp'
+import { yupResolver } from '@hookform/resolvers/yup';
+import { useForm } from 'react-hook-form';
+import { schema }from "./contactUsToday";
+import { useTranslation } from "react-i18next";
+import KaspiPay from '../images/kaspiPay.png';
+import BccPay from '../images/logobcc.png';
+
+
+const services = [
+    {
+        name: 'Первичный осмотр и консультация',
+        description: 'Комплексный осмотр полости рта и консультация специалиста',
+        price: '2000 тенге',
+    },
+    {
+        name: 'Лечение кариеса',
+        description: 'Удаление кариозных тканей и установка пломбы',
+        price: '10 000 тенге',
+    },
+    {
+        name: 'Рентгенодиагностика',
+        description: 'Рентгеновский снимок зубов для точной диагностики',
+        price: '1000 тенге',
+    },
+    {
+        name: 'Удаление зуба',
+        description: 'Удаление зуба любой сложности',
+        price: '7000 тенге',
+    },
+    {
+      name: 'Удаление зуба "мудрости"',
+      description: 'Удаление зуба любой сложности',
+      price: '10 000 тенге',
+  },
+    {
+        name: 'Имплантация зуба',
+        description: 'Вживление зубного имплантата',
+        price: '120 000 тенге',
+    },
+    {
+        name: 'Установка коронки',
+        description: 'Изготовление и установка зубной коронки',
+        price: '10 000 тенге',
+    },
+    {
+        name: 'Металлокерамика',
+        description: 'Изготовление и установка зубной коронки из металлокерамики',
+        price: '18 000 тенге',
+    },
+    {
+        name: 'Коронка, штампованная',
+        description: 'Изготовление и установка зубной коронки',
+        price: '10 000 тенге',
+    },
+    
+    {
+        name: 'Лечение пульпита',
+        description: 'Однокорневого, двухкорневого и трехкорневого',
+        price: '23 000 - 25 000 тенге',
+    }
+];
+
+export function Service () {
+    const { t, i18n } = useTranslation();
+    const [status, setStatus] = useState(null);
+    const [popupMessage, setPopupMessage] = useState(null);
+    const [isSuccess, setIsSuccess] = useState(false);
+    const { register, handleSubmit, errors, reset } = useForm({resolver: yupResolver(schema),});
+    
+
+    const handleFormSubmit = async (data) => {
+      try {
+        // console.log(reset);
+        const response = await axios.post('http://localhost:5000/send-email', data);
+        setStatus('Success! Email sent.');
+        setPopupMessage('Письмо успешно отправлено!');
+        setIsSuccess(true);
+        reset();
+        
+      } catch (error) {
+        setStatus('Error: Email not sent.');
+        setPopupMessage('Произошла ошибка при отправке письма.');
+        setIsSuccess(false);
+      }
+    };
+    return (
+      <div>
+        <div className="section">
+          <div className="container title">
+            <h2>Стоматологические услуги</h2>
+            <p>Мы предлагаем полный спектр стоматологических услуг, включая профилактическое лечение, диагностику, лечение кариеса, ортодонтию, протезирование, имплантацию и отбеливание зубов. Наша команда специалистов использует новейшие технологии для вашего комфорта и наилучших результатов. Мы предоставляем гибкие способы оплаты: наличными, Kaspi GOLD, Kaspi RED, Kaspi KREDIT. Кроме того, у нас действуют скидки и специальные предложения для постоянных клиентов. Свяжитесь с нами для получения консультации и подробной информации.</p>
+            <div className="pay"> 
+                <img src={KaspiPay} alt="Kaspi Pay" />
+                <img src={BccPay} alt="Kaspi Pay" />
+              </div>
+            <div className="containerTable">
+              <table className="table">
+                <thead>
+                  <tr>
+                    <th>Услуга</th>
+                    <th>Описание</th>
+                    <th>Цена</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {services.map((service, index) => (
+                    <tr key={index}>
+                      <td className="service-name">{service.name}</td>
+                      <td>{service.description}</td>
+                      <td>
+                        {service.price === 0 ? (
+                          <span className="special-price">
+                            Special Price: {service.price}
+                          </span>
+                        ) : (
+                          <span className="price">{service.price}</span>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <ContactUsToday onSubmit={handleFormSubmit} reset={reset} />
+      {/* {status && <p>{status}</p>} */}
+      <PopUp message={popupMessage} isSuccess={isSuccess} />
+      </div>
+    );
+};
+export default Service
+import React from 'react';
+import { GoogleMap, useJsApiLoader, InfoWindow, Marker } from '@react-google-maps/api';
+
+let containerStyle = {
+  width: '700px',
+  height: '400px'
+};
+
+document.documentElement.style.setProperty('--map-width', containerStyle.width);
+document.documentElement.style.setProperty('--map-height', containerStyle.height);
+
+
+const center = {
+  lat: 49.89586349462562,
+  lng: 73.21122122881611
+};
+
+function MyComponent() {
+  const [selectedPlace, setSelectedPlace] = React.useState(null);
+  const { isLoaded } = useJsApiLoader({
+    id: 'google-map-script',
+    googleMapsApiKey: "" 
+  });
+
+  const [map, setMap] = React.useState(null);
+
+  const onLoad = React.useCallback(function callback(map) {
+    setMap(map);
+    map.setZoom(17); // Устанавливаем зум здесь
+  }, []);
+
+  const onUnmount = React.useCallback(function callback(map) {
+    setMap(null)
+  }, []);
+
+  const markerClick = (place) => {
+    setSelectedPlace(place);
+  };
+
+  return (
+    <div className='mapStyle'>
+      {isLoaded ? (
+        <GoogleMap
+          mapContainerStyle={{ width: '100%', height: '100%' }}
+          center={center}
+          onLoad={onLoad}
+          onUnmount={onUnmount}
+        >
+          {selectedPlace && (
+            <InfoWindow
+              position={{ lat: selectedPlace.lat, lng: selectedPlace.lng }}
+              onCloseClick={() => setSelectedPlace(null)}
+            >
+              <div>
+                <h3>{selectedPlace.name}</h3>
+                <p>{selectedPlace.description}</p>
+              </div>
+            </InfoWindow>
+          )}
+          <Marker
+            position={{ lat: 49.89586349462562, lng: 73.21122122881611 }}
+            onClick={() => markerClick({ lat: 49.89586349462562, lng: 73.21122122881611, name: '"VitadentT"', description: 'Стомотология' })}
+          />
+        </GoogleMap>
+      ) : <></>}
+    </div>
+  );
+}
+
+export default React.memo(MyComponent);
+
+import React from 'react';
+import { Link } from 'react-router-dom';
+
+const NotFound = () => {
+    return (
+      <div>
+        <div className="section">
+          <div className="conteiner">
+            <div className="notfound-container">
+              <h2 className="notfound-title"> Ошибка 404</h2>
+              <p className="notfound-description">Страница не найдена</p>
+              <Link to="/" className="notfound-home-link">
+                Вернуться на главную
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+};
+
+export default NotFound;
+
+import React, { useState, useEffect } from 'react';
+import successIcon from '../images/success-icon.svg';
+import errorIcon from '../images/error-icon.svg';
+
+function PopUp({ message, isSuccess }) {
+  const [show, setShow] = useState(false);
+
+  useEffect(() => {
+    if (message) {
+      setShow(true);
+      const timer = setTimeout(() => {
+        setShow(false);
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [message]);
+
+  return (
+    <div className={`popup ${show ? 'show' : ''}`}>
+      <div className={`iconPopUp ${isSuccess ? 'iconPopUp-success' : 'iconPopUp-error'}`}>
+        <img src={isSuccess ? successIcon : errorIcon} alt={isSuccess ? 'Успех' : 'Ошибка'} />
+      </div>
+      <h2>{isSuccess ? 'Письмо отправлено' : 'Ошибка отправки'}</h2>
+      <p>{message}</p>
+    </div>
+  );
+}
+
+export default PopUp;
+
